@@ -43,7 +43,7 @@ Para compilar el archivo TypeScript de una carpeta y generar el .js en la misma 
 
 ```bash
 # Ejemplo para la carpeta 01-typescript-basico
-tsc 01-typescript-basico/index.ts
+tsc 
 ```
 
 Esto generará el archivo `index.js` en la misma carpeta.
@@ -53,31 +53,12 @@ Para que TypeScript compile automáticamente cada vez que guardes cambios:
 
 ```bash
 # Compilar y observar cambios en un archivo
-tsc 01-typescript-basico/index.ts --watch
+tsc  --watch
 
 # O usando la forma corta
-tsc 01-typescript-basico/index.ts -w
+tsc  -w
 ```
 
-### Compilar cada ejercicio
-Como cada carpeta es independiente, compila el archivo que necesites:
-
-```bash
-# Ejercicio 1
-tsc 01-typescript-basico/index.ts
-
-# Ejercicio 2
-tsc 02-objetos-y-tipos/index.ts
-
-# Ejercicio 3
-tsc 03-dom-eventos/index.ts
-
-# Ejercicio 4
-tsc 04-dom-avanzado/index.ts
-
-# Ejercicio 5
-tsc 05-async-fetch/index.ts
-```
 
 ## Usar los archivos en HTML
 
