@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 3 - TypeScript + DOM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        li button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Clase 3: TypeScript + DOM</h1>
+
+    <!-- MÓDULO 3: Tipos del DOM -->
+    <section>
+        <h2>Módulo 3: Tipos del DOM</h2>
+        <button id="btn-tipos">Click para probar tipos</button>
+        <input type="text" id="input-tipos" placeholder="Escribe algo">
+        <div id="resultado-tipos"></div>
+    </section>
+
+    <!-- MÓDULO 4 y 5: querySelector y otros selectores -->
+    <section>
+        <h2>Módulo 4-5: Selectores</h2>
+        <button class="btn">Botón 1</button>
+        <button class="btn">Botón 2</button>
+        <button class="btn">Botón 3</button>
+        <div class="item">Item 1</div>
+        <div class="item">Item 2</div>
+        <h1 id="titulo">Mi Título</h1>
+    </section>
+
+    <!-- MÓDULO 7: Event Types -->
+    <section>
+        <h2>Módulo 7: Event Types</h2>
+        <button id="btn">Click me (MouseEvent)</button>
+        <input type="text" id="texto" placeholder="Presiona Enter (KeyboardEvent)">
+        <div id="resultado-eventos"></div>
+    </section>
+
+    <!-- MÓDULO 8: target vs currentTarget -->
+    <section>
+        <h2>Módulo 8: target vs currentTarget</h2>
+        <div id="contenedor" style="background: #e9ecef; padding: 20px; border-radius: 4px;">
+            <button>Botón 1</button>
+            <button>Botón 2</button>
+            <p>Un párrafo para clickear</p>
+        </div>
+        <div id="resultado-target"></div>
+    </section>
+
+    <!-- MÓDULO 9: Formulario -->
+    <section>
+        <h2>Módulo 9: Formulario con Validación</h2>
+        <form id="formulario">
+            <div>
+                <input type="text" id="nombre" placeholder="Nombre" style="width: 200px;">
+            </div>
+            <div>
+                <input type="email" id="email" placeholder="Email" style="width: 200px;">
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+        <div id="resultado"></div>
+    </section>
+
+    <!-- MÓDULO 10: Lista de Tareas -->
+    <section>
+        <h2>Módulo 10: Lista de Tareas</h2>
+        <div>
+            <input type="text" id="nuevaTarea" placeholder="Nueva tarea" style="width: 300px;">
+            <button id="agregarBtn">Agregar</button>
+        </div>
+        <ul id="listaTareas"></ul>
+    </section>
+
+    <script src="index.js"></script>
+</body>
+
+</html>

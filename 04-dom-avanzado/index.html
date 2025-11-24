@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 4 - TypeScript + DOM Avanzado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        input,
+        button,
+        select {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Clase 4: TypeScript + DOM (Parte 2) + Avanzado</h1>
+
+    <!-- MÓDULO 2: FormData -->
+    <section>
+        <h2>Módulo 2: FormData</h2>
+        <form id="registro">
+            <div>
+                <input type="text" name="nombre" placeholder="Nombre" required>
+            </div>
+            <div>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div>
+                <input type="number" name="edad" placeholder="Edad" required>
+            </div>
+            <button type="submit">Registrar</button>
+        </form>
+        <div id="resultadoRegistro" style="margin-top: 10px;"></div>
+    </section>
+
+    <!-- MÓDULO 3: Checkbox y Radio -->
+    <section>
+        <h2>Módulo 3: Checkbox y Radio Buttons</h2>
+        <form id="preferencias">
+            <label>
+                <input type="checkbox" id="newsletter">
+                Recibir newsletter
+            </label>
+
+            <p><strong>Plan:</strong></p>
+            <label>
+                <input type="radio" name="plan" value="basico">
+                Plan Básico
+            </label>
+            <label>
+                <input type="radio" name="plan" value="premium">
+                Plan Premium
+            </label>
+
+            <button type="submit" style="margin-top: 10px;">Guardar</button>
+        </form>
+        <div id="resultadoPreferencias" style="margin-top: 10px;"></div>
+    </section>
+
+    <!-- MÓDULO 4-5: Type Guards -->
+    <section>
+        <h2>Módulo 4-5: Type Guards</h2>
+        <input type="text" id="inputValor" placeholder="Escribe un número o texto">
+        <button id="btnProcesar">Procesar Valor (typeof)</button>
+        <div id="resultado1" style="margin-top: 10px;"></div>
+
+        <div style="margin-top: 20px;">
+            <button id="btn1">Botón</button>
+            <input id="input1" type="text" placeholder="Input">
+            <div id="div1" style="padding: 10px; border: 1px solid #ddd; margin-top: 10px;">Div</div>
+            <button id="testInstanceof" style="margin-top: 10px;">Probar instanceof</button>
+        </div>
+    </section>
+
+    <!-- MÓDULO 6-7: Generics -->
+    <section>
+        <h2>Módulo 6-7: Generics</h2>
+        <button id="testGenerics">Probar Generics</button>
+        <div id="resultadoGenerics" style="margin-top: 10px;"></div>
+    </section>
+
+    <!-- MÓDULO 8: Ejemplo Integrador -->
+    <section>
+        <h2>Módulo 8: Lista de Tareas</h2>
+        <div>
+            <input type="text" id="nuevaTarea" placeholder="Nueva tarea">
+            <button id="agregar">Agregar</button>
+        </div>
+        <ul id="lista" style="margin-top: 20px;"></ul>
+    </section>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
