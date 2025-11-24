@@ -3,249 +3,338 @@
 // ============================================
 
 // ============================================
-// MÓDULO 3: Tipos del DOM - HTMLElement
+// MÓDULO 3: Tipos Específicos del DOM
 // ============================================
 
-const btnTipos = document.querySelector<HTMLButtonElement>("#btn-tipos");
-const inputTipos = document.querySelector<HTMLInputElement>("#input-tipos");
-const resultadoTipos =
-  document.querySelector<HTMLDivElement>("#resultado-tipos");
+console.log("=== MÓDULO 3: Tipos del DOM ===");
 
-btnTipos?.addEventListener("click", () => {
-  if (inputTipos && resultadoTipos) {
-    const valor = inputTipos.value;
-    resultadoTipos.textContent = `Escribiste: ${valor}`;
-    resultadoTipos.style.color = "blue";
-  }
-});
+const btn = document.querySelector<HTMLButtonElement>("#btn");
+const input = document.querySelector<HTMLInputElement>("#input");
+const titulo = document.querySelector<HTMLHeadingElement>("#titulo");
 
-// ============================================
-// MÓDULO 4: querySelector con Tipos Genéricos
-// ============================================
-
-// Especificar el tipo con genéricos
-const button = document.querySelector<HTMLButtonElement>("#mi-boton");
-const input = document.querySelector<HTMLInputElement>("#email");
-const form = document.querySelector<HTMLFormElement>("#formulario");
-
-// Verificar si existe antes de usar
-if (button) {
-  button.textContent = "Hacer click";
-  button.disabled = false;
+// Demostrar propiedades específicas
+if (btn) {
+  btn.addEventListener("click", () => {
+    btn.disabled = true; // Propiedad específica de HTMLButtonElement
+    btn.textContent = "¡Clickeado!";
+    console.log("Botón deshabilitado");
+  });
 }
 
 if (input) {
-  input.placeholder = "Ingrese su email";
+  input.addEventListener("input", () => {
+    console.log("Valor del input:", input.value); // Propiedad específica de HTMLInputElement
+  });
 }
 
-// ============================================
-// MÓDULO 5: getElementById y querySelectorAll
-// ============================================
-
-// getElementById
-const titulo = document.getElementById("titulo");
 if (titulo) {
-  titulo.style.color = "#007bff";
+  titulo.addEventListener("click", () => {
+    titulo.style.color = titulo.style.color === "red" ? "#333" : "red";
+    console.log("Color del título cambiado");
+  });
 }
 
-// querySelectorAll - retorna NodeList
-const botones = document.querySelectorAll<HTMLButtonElement>(".btn");
+// ============================================
+// MÓDULO 4: querySelector - Selección Individual
+// ============================================
 
-// NodeList tiene forEach
-botones.forEach((boton, index) => {
-  boton.addEventListener("click", () => {
-    console.log(`Clickeaste el botón ${index + 1}`);
+console.log("=== MÓDULO 4: querySelector ===");
+
+const miBoton = document.querySelector<HTMLButtonElement>("#miBoton");
+const mensaje = document.querySelector<HTMLParagraphElement>("#mensaje");
+
+if (miBoton && mensaje) {
+  miBoton.addEventListener("click", () => {
+    mensaje.textContent = "¡Botón clickeado con TypeScript!";
+    miBoton.disabled = true;
+    miBoton.style.opacity = "0.5";
+    console.log("querySelector: botón clickeado");
+  });
+}
+
+// ============================================
+// MÓDULO 5: querySelectorAll - Múltiples Elementos
+// ============================================
+
+console.log("=== MÓDULO 5: querySelectorAll ===");
+
+const botones = document.querySelectorAll<HTMLButtonElement>(".btn");
+const btnDeshabilitar =
+  document.querySelector<HTMLButtonElement>("#deshabilitarTodos");
+
+console.log(`Encontrados ${botones.length} botones con clase .btn`);
+
+btnDeshabilitar?.addEventListener("click", () => {
+  let contador = 0;
+
+  // NodeList tiene forEach
+  botones.forEach((boton) => {
+    boton.disabled = true;
+    boton.style.opacity = "0.5";
+    contador++;
+  });
+
+  console.log(`${contador} botones deshabilitados`);
+
+  if (btnDeshabilitar) {
+    btnDeshabilitar.textContent = "¡Todos deshabilitados!";
+    btnDeshabilitar.disabled = true;
+  }
+});
+
+// Demostrar conversión a Array
+const arrayBotones = Array.from(botones);
+const textosBotones = arrayBotones.map((btn) => btn.textContent);
+console.log("Textos de los botones:", textosBotones);
+
+// ============================================
+// MÓDULO 7: Event Types
+// ============================================
+
+console.log("=== MÓDULO 7: Event Types ===");
+
+const btnClick = document.querySelector<HTMLButtonElement>("#btnClick");
+const inputKey = document.querySelector<HTMLInputElement>("#inputKey");
+const info = document.querySelector<HTMLParagraphElement>("#info");
+
+// MouseEvent
+btnClick?.addEventListener("click", (event: MouseEvent) => {
+  if (info) {
+    info.textContent = `MouseEvent - Click en coordenadas X: ${event.clientX}, Y: ${event.clientY}`;
+    info.style.color = "#e74c3c";
+  }
+  console.log("MouseEvent:", {
+    x: event.clientX,
+    y: event.clientY,
+    button: event.button,
   });
 });
 
-// getElementsByClassName retorna HTMLCollection
-const items = document.getElementsByClassName("item");
-const arrayItems = Array.from(items);
-arrayItems.forEach((item, index) => {
-  item.textContent = `Item ${index + 1} - Actualizado`;
-});
-
-// ============================================
-// MÓDULO 7: Event Types - Tipos de Eventos
-// ============================================
-
-const btnEventos = document.querySelector<HTMLButtonElement>("#btn");
-const inputTexto = document.querySelector<HTMLInputElement>("#texto");
-const resultadoEventos =
-  document.querySelector<HTMLDivElement>("#resultado-eventos");
-
-// MouseEvent
-btnEventos?.addEventListener("click", (event: MouseEvent) => {
-  if (resultadoEventos) {
-    resultadoEventos.textContent = `Click en X: ${event.clientX}, Y: ${event.clientY}`;
-  }
-});
-
 // KeyboardEvent
-inputTexto?.addEventListener("keydown", (event: KeyboardEvent) => {
-  console.log("Tecla presionada:", event.key);
+inputKey?.addEventListener("keydown", (event: KeyboardEvent) => {
+  console.log("KeyboardEvent:", {
+    key: event.key,
+    code: event.code,
+    ctrlKey: event.ctrlKey,
+    shiftKey: event.shiftKey,
+  });
 
-  if (event.key === "Enter" && resultadoEventos) {
-    resultadoEventos.textContent = `Presionaste Enter! Valor: ${inputTexto.value}`;
-  }
-});
-
-// FocusEvent
-inputTexto?.addEventListener("focus", (event: FocusEvent) => {
-  console.log("Input tiene foco");
-  if (inputTexto) {
-    inputTexto.style.borderColor = "blue";
-  }
-});
-
-inputTexto?.addEventListener("blur", (event: FocusEvent) => {
-  console.log("Input perdió el foco");
-  if (inputTexto) {
-    inputTexto.style.borderColor = "#ddd";
+  if (event.key === "Enter" && info && inputKey) {
+    info.textContent = `KeyboardEvent - Presionaste Enter. Valor: "${inputKey.value}"`;
+    info.style.color = "#27ae60";
+    inputKey.value = "";
   }
 });
 
 // ============================================
-// MÓDULO 8: event.target y event.currentTarget
+// MÓDULO 8: target vs currentTarget
 // ============================================
+
+console.log("=== MÓDULO 8: target vs currentTarget ===");
 
 const contenedor = document.querySelector<HTMLDivElement>("#contenedor");
-const resultadoTarget =
-  document.querySelector<HTMLDivElement>("#resultado-target");
+const infoTarget = document.querySelector<HTMLParagraphElement>("#infoTarget");
 
 contenedor?.addEventListener("click", (event: MouseEvent) => {
-  // target: el elemento específico clickeado
+  // target: elemento específico clickeado
   const target = event.target as HTMLElement;
 
-  // currentTarget: siempre es el contenedor
+  // currentTarget: elemento con el listener (siempre contenedor)
   const currentTarget = event.currentTarget as HTMLDivElement;
 
-  if (resultadoTarget) {
-    resultadoTarget.innerHTML = `
-      <p><strong>Target (elemento clickeado):</strong> ${target.tagName}</p>
-      <p><strong>CurrentTarget (listener en):</strong> ${currentTarget.id}</p>
+  if (infoTarget) {
+    infoTarget.innerHTML = `
+      <strong>target</strong> (elemento clickeado): ${target.tagName}<br>
+      <strong>currentTarget</strong> (listener en): ${currentTarget.id}
     `;
+  }
+
+  console.log("Event delegation:", {
+    target: target.tagName,
+    currentTarget: currentTarget.id,
+  });
+
+  // Event delegation: acción específica según tipo
+  if (target instanceof HTMLButtonElement) {
+    target.style.backgroundColor = "#3498db";
+    target.style.color = "white";
+    console.log("Clickeaste un botón");
+  } else if (target instanceof HTMLParagraphElement) {
+    target.style.fontWeight = "bold";
+    console.log("Clickeaste un párrafo");
   }
 });
 
 // ============================================
-// MÓDULO 9: Ejemplo Práctico - Formulario
+// MÓDULO 9: Formulario de Contacto
 // ============================================
 
-const formulario = document.querySelector<HTMLFormElement>("#formulario");
+console.log("=== MÓDULO 9: Formulario con Validación ===");
+
+const form = document.querySelector<HTMLFormElement>("#contacto");
 const nombreInput = document.querySelector<HTMLInputElement>("#nombre");
 const emailInput = document.querySelector<HTMLInputElement>("#email");
+const mensajeInput =
+  document.querySelector<HTMLTextAreaElement>("#mensajeForm");
 const resultado = document.querySelector<HTMLDivElement>("#resultado");
 
-formulario?.addEventListener("submit", (event: Event) => {
+function mostrarError(msg: string): void {
+  if (resultado) {
+    resultado.textContent = `❌ ${msg}`;
+    resultado.style.color = "#e74c3c";
+    resultado.style.backgroundColor = "#ffe6e6";
+    resultado.style.display = "block";
+  }
+  console.error("Error de validación:", msg);
+}
+
+function mostrarExito(msg: string): void {
+  if (resultado) {
+    resultado.textContent = `✅ ${msg}`;
+    resultado.style.color = "#27ae60";
+    resultado.style.backgroundColor = "#e6ffe6";
+    resultado.style.display = "block";
+  }
+  console.log("Formulario enviado:", msg);
+}
+
+form?.addEventListener("submit", (event: Event) => {
   event.preventDefault();
 
-  if (!nombreInput || !emailInput || !resultado) {
-    console.error("Elementos no encontrados");
+  if (!nombreInput || !emailInput || !mensajeInput || !resultado) {
+    console.error("Elementos del formulario no encontrados");
     return;
   }
 
   const nombre = nombreInput.value.trim();
   const email = emailInput.value.trim();
+  const mensaje = mensajeInput.value.trim();
 
   // Validaciones
-  if (nombre === "") {
-    resultado.textContent = "El nombre es requerido";
-    resultado.style.color = "red";
-    resultado.style.backgroundColor = "#ffe6e6";
-    resultado.style.padding = "10px";
+  if (nombre.length < 3) {
+    mostrarError("El nombre debe tener al menos 3 caracteres");
+    nombreInput.focus();
     return;
   }
 
-  if (email === "" || !email.includes("@")) {
-    resultado.textContent = "Email inválido";
-    resultado.style.color = "red";
-    resultado.style.backgroundColor = "#ffe6e6";
-    resultado.style.padding = "10px";
+  if (!email.includes("@") || !email.includes(".")) {
+    mostrarError("Email inválido (debe contener @ y dominio)");
+    emailInput.focus();
+    return;
+  }
+
+  if (mensaje.length < 10) {
+    mostrarError("El mensaje debe tener al menos 10 caracteres");
+    mensajeInput.focus();
     return;
   }
 
   // Éxito
-  resultado.textContent = `¡Bienvenido ${nombre}! Email: ${email}`;
-  resultado.style.color = "green";
-  resultado.style.backgroundColor = "#e6ffe6";
-  resultado.style.padding = "10px";
+  mostrarExito(`Gracias ${nombre}, te contactaremos a ${email} pronto.`);
+
+  console.log("Datos del formulario:", { nombre, email, mensaje });
 
   // Limpiar formulario
-  nombreInput.value = "";
-  emailInput.value = "";
+  form.reset();
 });
 
 // ============================================
-// MÓDULO 10: Ejemplo Práctico - Lista de Tareas
+// MÓDULO 10: Lista Interactiva
 // ============================================
 
-const inputTarea = document.querySelector<HTMLInputElement>("#nuevaTarea");
-const btnAgregar = document.querySelector<HTMLButtonElement>("#agregarBtn");
-const listaTareas = document.querySelector<HTMLUListElement>("#listaTareas");
+console.log("=== MÓDULO 10: Lista Interactiva ===");
 
-function agregarTarea(): void {
-  if (!inputTarea || !listaTareas) return;
+const itemInput = document.querySelector<HTMLInputElement>("#itemInput");
+const agregarBtn = document.querySelector<HTMLButtonElement>("#agregarBtn");
+const lista = document.querySelector<HTMLUListElement>("#lista");
 
-  const textoTarea = inputTarea.value.trim();
+let itemCounter = 0;
 
-  if (textoTarea === "") {
-    alert("Por favor ingresa una tarea");
+function agregarItem(): void {
+  if (!itemInput || !lista) {
+    console.error("Elementos de lista no encontrados");
     return;
   }
 
+  const texto = itemInput.value.trim();
+
+  if (texto === "") {
+    alert("⚠️ Escribe algo primero");
+    itemInput.focus();
+    return;
+  }
+
+  itemCounter++;
+
   // Crear elementos
   const li = document.createElement("li");
-  li.textContent = textoTarea;
+  li.style.cssText = `
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin: 8px 0;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #3498db;
+    transition: all 0.3s ease;
+  `;
 
-  // Crear botón eliminar
+  const span = document.createElement("span");
+  span.textContent = `${itemCounter}. ${texto}`;
+  span.style.flex = "1";
+
   const btnEliminar = document.createElement("button");
   btnEliminar.textContent = "Eliminar";
+  btnEliminar.style.cssText = `
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  `;
 
-  // Evento para eliminar
-  btnEliminar.addEventListener("click", (event: MouseEvent) => {
-    const target = event.currentTarget as HTMLButtonElement;
-    const liElement = target.parentElement as HTMLLIElement;
-    liElement.remove();
+  btnEliminar.addEventListener("click", () => {
+    li.style.opacity = "0";
+    li.style.transform = "translateX(20px)";
+    setTimeout(() => {
+      li.remove();
+      console.log(`Item "${texto}" eliminado`);
+    }, 300);
   });
 
+  btnEliminar.addEventListener("mouseenter", () => {
+    btnEliminar.style.backgroundColor = "#c0392b";
+  });
+
+  btnEliminar.addEventListener("mouseleave", () => {
+    btnEliminar.style.backgroundColor = "#e74c3c";
+  });
+
+  li.appendChild(span);
   li.appendChild(btnEliminar);
-  listaTareas.appendChild(li);
+  lista.appendChild(li);
+
+  console.log(`Item #${itemCounter} agregado: "${texto}"`);
 
   // Limpiar input
-  inputTarea.value = "";
-  inputTarea.focus();
+  itemInput.value = "";
+  itemInput.focus();
 }
 
-btnAgregar?.addEventListener("click", agregarTarea);
+agregarBtn?.addEventListener("click", agregarItem);
 
-// También agregar con Enter
-inputTarea?.addEventListener("keydown", (event: KeyboardEvent) => {
+itemInput?.addEventListener("keydown", (event: KeyboardEvent) => {
   if (event.key === "Enter") {
-    agregarTarea();
+    agregarItem();
   }
 });
 
 // ============================================
-// EJEMPLOS ADICIONALES
+// LOGS FINALES
 // ============================================
 
-// Cambiar clases CSS
-const elemento1 = document.querySelector<HTMLDivElement>("#contenedor");
-if (elemento1) {
-  elemento1.classList.add("activo");
-  const tieneClase = elemento1.classList.contains("activo");
-  console.log("Tiene clase activo:", tieneClase);
-}
-
-// Trabajar con checkboxes (ejemplo)
-const crearCheckboxEjemplo = () => {
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.id = "miCheckbox";
-
-  checkbox.addEventListener("change", (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    console.log("Checkbox está:", target.checked ? "marcado" : "desmarcado");
-  });
-};
+console.log("✅ Clase 3 inicializada correctamente");
+console.log("📚 Módulos activos: 3, 4, 5, 7, 8, 9, 10");

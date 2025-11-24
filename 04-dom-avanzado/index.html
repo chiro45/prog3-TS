@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase 4 - TypeScript + DOM Avanzado</title>
+    <title>Clase 4 - TypeScript Avanzado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
 
         section {
             background: white;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -24,45 +24,56 @@
 
         h2 {
             color: #333;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 3px solid #3498db;
             padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         input,
-        button,
-        select {
-            padding: 10px;
-            margin: 5px;
+        select,
+        button {
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 14px;
         }
 
         button {
-            background-color: #007bff;
+            background-color: #3498db;
             color: white;
             cursor: pointer;
             border: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
 
-        label {
-            display: block;
-            margin: 10px 0;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #f8f9fa;
-            padding: 10px;
-            margin: 5px 0;
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
             border-radius: 4px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
         }
     </style>
 </head>
@@ -70,78 +81,31 @@
 <body>
     <h1>Clase 4: TypeScript + DOM (Parte 2) + Avanzado</h1>
 
-    <!-- MÓDULO 2: FormData -->
+    <!-- MÓDULO 2-3: FormData -->
     <section>
-        <h2>Módulo 2: FormData</h2>
+        <h2>Módulo 2-3: FormData en Acción</h2>
+        <p><strong>Completa el formulario y mira cómo FormData extrae los datos:</strong></p>
+
         <form id="registro">
-            <div>
-                <input type="text" name="nombre" placeholder="Nombre" required>
-            </div>
-            <div>
-                <input type="email" name="email" placeholder="Email" required>
-            </div>
-            <div>
-                <input type="number" name="edad" placeholder="Edad" required>
-            </div>
-            <button type="submit">Registrar</button>
+            <input type="text" name="nombre" placeholder="Nombre completo" required minlength="3">
+
+            <input type="email" name="email" placeholder="Email" required>
+
+            <input type="number" name="edad" placeholder="Edad" required min="18" max="100">
+
+            <select name="pais" required>
+                <option value="">-- Selecciona un país --</option>
+                <option value="ar">Argentina</option>
+                <option value="cl">Chile</option>
+                <option value="uy">Uruguay</option>
+                <option value="py">Paraguay</option>
+                <option value="br">Brasil</option>
+            </select>
+
+            <button type="submit">Registrar Usuario</button>
         </form>
-        <div id="resultadoRegistro" style="margin-top: 10px;"></div>
-    </section>
 
-    <!-- MÓDULO 3: Checkbox y Radio -->
-    <section>
-        <h2>Módulo 3: Checkbox y Radio Buttons</h2>
-        <form id="preferencias">
-            <label>
-                <input type="checkbox" id="newsletter">
-                Recibir newsletter
-            </label>
-
-            <p><strong>Plan:</strong></p>
-            <label>
-                <input type="radio" name="plan" value="basico">
-                Plan Básico
-            </label>
-            <label>
-                <input type="radio" name="plan" value="premium">
-                Plan Premium
-            </label>
-
-            <button type="submit" style="margin-top: 10px;">Guardar</button>
-        </form>
-        <div id="resultadoPreferencias" style="margin-top: 10px;"></div>
-    </section>
-
-    <!-- MÓDULO 4-5: Type Guards -->
-    <section>
-        <h2>Módulo 4-5: Type Guards</h2>
-        <input type="text" id="inputValor" placeholder="Escribe un número o texto">
-        <button id="btnProcesar">Procesar Valor (typeof)</button>
-        <div id="resultado1" style="margin-top: 10px;"></div>
-
-        <div style="margin-top: 20px;">
-            <button id="btn1">Botón</button>
-            <input id="input1" type="text" placeholder="Input">
-            <div id="div1" style="padding: 10px; border: 1px solid #ddd; margin-top: 10px;">Div</div>
-            <button id="testInstanceof" style="margin-top: 10px;">Probar instanceof</button>
-        </div>
-    </section>
-
-    <!-- MÓDULO 6-7: Generics -->
-    <section>
-        <h2>Módulo 6-7: Generics</h2>
-        <button id="testGenerics">Probar Generics</button>
-        <div id="resultadoGenerics" style="margin-top: 10px;"></div>
-    </section>
-
-    <!-- MÓDULO 8: Ejemplo Integrador -->
-    <section>
-        <h2>Módulo 8: Lista de Tareas</h2>
-        <div>
-            <input type="text" id="nuevaTarea" placeholder="Nueva tarea">
-            <button id="agregar">Agregar</button>
-        </div>
-        <ul id="lista" style="margin-top: 20px;"></ul>
+        <div id="resultado"></div>
     </section>
 
     <script src="index.js"></script>

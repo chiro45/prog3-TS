@@ -2,72 +2,66 @@
 // CLASE 4: TYPESCRIPT + DOM (PARTE 2) + AVANZADO
 // ============================================
 
+console.log("=== CLASE 4 INICIALIZADA ===");
+
 // ============================================
-// MÓDULO 2: FormData
+// MÓDULO 2-3: FormData en Acción
 // ============================================
 
-const formRegistro = document.querySelector<HTMLFormElement>("#registro");
-const resultadoRegistro =
-  document.querySelector<HTMLDivElement>("#resultadoRegistro");
+const form = document.querySelector<HTMLFormElement>("#registro");
+const resultado = document.querySelector<HTMLDivElement>("#resultado");
 
-formRegistro?.addEventListener("submit", (event: Event) => {
+form?.addEventListener("submit", (event: Event) => {
   event.preventDefault();
+
+  console.log("=== FORMULARIO ENVIADO ===");
 
   const formElement = event.currentTarget as HTMLFormElement;
+
+  // Usar FormData para extraer todos los valores
   const formData = new FormData(formElement);
 
-  const nombre = formData.get("nombre") as string;
-  const email = formData.get("email") as string;
-  const edad = formData.get("edad") as string;
+  // Extraer cada campo
+  const datos = {
+    nombre: formData.get("nombre") as string,
+    email: formData.get("email") as string,
+    edad: parseInt(formData.get("edad") as string),
+    pais: formData.get("pais") as string,
+  };
 
-  if (resultadoRegistro) {
-    resultadoRegistro.innerHTML = `
-      <div style="background: #e7f3ff; padding: 10px; border-radius: 4px;">
-        <strong>Datos:</strong> ${nombre}, ${email}, ${edad} años
-      </div>
+  console.log("Datos extraídos con FormData:", datos);
+
+  // Mostrar resultado en pantalla
+  if (resultado) {
+    resultado.className = "success";
+    resultado.style.display = "block";
+    resultado.innerHTML = `
+      <h3>✅ Usuario Registrado</h3>
+      <p><strong>Nombre:</strong> ${datos.nombre}</p>
+      <p><strong>Email:</strong> ${datos.email}</p>
+      <p><strong>Edad:</strong> ${datos.edad} años</p>
+      <p><strong>País:</strong> ${datos.pais.toUpperCase()}</p>
     `;
   }
 
-  console.log({ nombre, email, edad: parseInt(edad) });
-});
+  // Limpiar formulario
+  formElement.reset();
 
-// ============================================
-// MÓDULO 3: Checkbox y Radio Buttons
-// ============================================
-
-const formPrefs = document.querySelector<HTMLFormElement>("#preferencias");
-const newsletter = document.querySelector<HTMLInputElement>("#newsletter");
-const resultadoPreferencias = document.querySelector<HTMLDivElement>(
-  "#resultadoPreferencias"
-);
-
-formPrefs?.addEventListener("submit", (event: Event) => {
-  event.preventDefault();
-
-  // Obtener valor de checkbox
-  const recibeNewsletter = newsletter?.checked || false;
-
-  // Obtener valor de radio button
-  const formData = new FormData(formPrefs);
-  const plan = formData.get("plan") as string;
-
-  if (resultadoPreferencias) {
-    resultadoPreferencias.innerHTML = `
-      <div style="background: #e7f3ff; padding: 10px; border-radius: 4px;">
-        Newsletter: ${recibeNewsletter ? "Sí" : "No"}<br>
-        Plan: ${plan || "No seleccionado"}
-      </div>
-    `;
-  }
-
-  console.log({ newsletter: recibeNewsletter, plan });
+  // Ocultar resultado después de 5 segundos
+  setTimeout(() => {
+    if (resultado) {
+      resultado.style.display = "none";
+    }
+  }, 5000);
 });
 
 // ============================================
 // MÓDULO 4: Type Guards - typeof
 // ============================================
 
-function procesarValor(valor: string | number): string {
+console.log("=== MÓDULO 4: Type Guards - typeof ===");
+
+function procesar(valor: string | number): string {
   if (typeof valor === "string") {
     return valor.toUpperCase();
   } else {
@@ -75,164 +69,176 @@ function procesarValor(valor: string | number): string {
   }
 }
 
-const inputValor = document.querySelector<HTMLInputElement>("#inputValor");
-const btnProcesar = document.querySelector<HTMLButtonElement>("#btnProcesar");
-const resultado1 = document.querySelector<HTMLDivElement>("#resultado1");
+console.log('procesar("hola"):', procesar("hola"));
+console.log("procesar(3.14159):", procesar(3.14159));
 
-btnProcesar?.addEventListener("click", () => {
-  if (!inputValor || !resultado1) return;
-
-  const valor = inputValor.value;
-  const numero = parseFloat(valor);
-
-  let resultado: string;
-
-  if (!isNaN(numero)) {
-    resultado = procesarValor(numero);
+function mostrarLongitud(texto: unknown): void {
+  if (typeof texto === "string") {
+    console.log(`Es string, longitud: ${texto.length}`);
   } else {
-    resultado = procesarValor(valor);
+    console.log("No es un string, es:", typeof texto);
   }
+}
 
-  resultado1.innerHTML = `
-    <div style="background: #e7f3ff; padding: 10px; border-radius: 4px;">
-      Resultado: ${resultado}
-    </div>
-  `;
-});
+mostrarLongitud("TypeScript");
+mostrarLongitud(123);
+mostrarLongitud(true);
 
 // ============================================
 // MÓDULO 5: Type Guards - instanceof
 // ============================================
 
+console.log("=== MÓDULO 5: Type Guards - instanceof ===");
+
 function manejarElemento(elemento: HTMLElement): string {
   if (elemento instanceof HTMLButtonElement) {
-    elemento.style.backgroundColor = "#28a745";
-    return "Botón - fondo verde";
+    return `Es un BOTÓN: "${elemento.textContent}"`;
   } else if (elemento instanceof HTMLInputElement) {
-    elemento.style.backgroundColor = "#ffc107";
-    return "Input - fondo amarillo";
+    return `Es un INPUT de tipo: ${elemento.type}`;
   } else if (elemento instanceof HTMLDivElement) {
-    elemento.style.backgroundColor = "#17a2b8";
-    return "Div - fondo azul";
+    return `Es un DIV con id: ${elemento.id}`;
+  } else {
+    return `Es un ${elemento.tagName}`;
   }
-  return "Desconocido";
 }
 
-const btnTestInstanceof =
-  document.querySelector<HTMLButtonElement>("#testInstanceof");
+// Probar con elementos del DOM
+const botonRegistrar = document.querySelector<HTMLButtonElement>("button");
+const inputNombre = document.querySelector<HTMLInputElement>('input[name="nombre"]');
+const resultado2 = document.querySelector<HTMLDivElement>("#resultado");
 
-btnTestInstanceof?.addEventListener("click", () => {
-  const btn1 = document.getElementById("btn1");
-  const input1 = document.getElementById("input1");
-  const div1 = document.getElementById("div1");
+if (botonRegistrar) {
+  console.log(manejarElemento(botonRegistrar));
+}
 
-  const resultados: string[] = [];
+if (inputNombre) {
+  console.log(manejarElemento(inputNombre));
+}
 
-  if (btn1) resultados.push(manejarElemento(btn1));
-  if (input1) resultados.push(manejarElemento(input1));
-  if (div1) resultados.push(manejarElemento(div1));
-
-  alert(resultados.join("\n"));
-});
+if (resultado2) {
+  console.log(manejarElemento(resultado2));
+}
 
 // ============================================
-// MÓDULO 6-7: Generics
+// MÓDULO 6: Type Guards Personalizados
 // ============================================
 
-// Función genérica
+console.log("=== MÓDULO 6: Type Guards Personalizados ===");
+
+function esEmail(texto: string): boolean {
+  return texto.includes("@") && texto.includes(".");
+}
+
+function esNumeroPositivo(valor: unknown): valor is number {
+  return typeof valor === "number" && valor > 0;
+}
+
+interface Usuario {
+  nombre: string;
+  email: string;
+  edad: number;
+}
+
+function validarUsuario(
+  nombre: string,
+  email: string,
+  edad: unknown
+): Usuario | null {
+  if (nombre.length < 3) {
+    console.log("❌ Nombre muy corto");
+    return null;
+  }
+
+  if (!esEmail(email)) {
+    console.log("❌ Email inválido");
+    return null;
+  }
+
+  if (!esNumeroPositivo(edad)) {
+    console.log("❌ Edad inválida");
+    return null;
+  }
+
+  return { nombre, email, edad };
+}
+
+// Probar validación
+const usuario1 = validarUsuario("Juan", "juan@mail.com", 25);
+console.log("Usuario 1:", usuario1);
+
+const usuario2 = validarUsuario("Al", "invalido", -5);
+console.log("Usuario 2:", usuario2);
+
+// ============================================
+// MÓDULO 7-8: Generics
+// ============================================
+
+console.log("=== MÓDULO 7-8: Generics ===");
+
+// Función genérica básica
 function obtenerPrimero<T>(arr: T[]): T {
   return arr[0];
 }
 
+const primerString = obtenerPrimero(["a", "b", "c"]);
+const primerNumero = obtenerPrimero([1, 2, 3]);
+const primerBool = obtenerPrimero([true, false, true]);
+
+console.log("Primer string:", primerString);
+console.log("Primer número:", primerNumero);
+console.log("Primer boolean:", primerBool);
+
+// Crear arrays con generics
 function crearArray<T>(elemento: T, cantidad: number): T[] {
   return Array(cantidad).fill(elemento);
 }
 
-const btnTestGenerics =
-  document.querySelector<HTMLButtonElement>("#testGenerics");
-const resultadoGenerics =
-  document.querySelector<HTMLDivElement>("#resultadoGenerics");
+const arrayStrings = crearArray("hola", 3);
+const arrayNumeros = crearArray(5, 4);
 
-btnTestGenerics?.addEventListener("click", () => {
-  const primerString = obtenerPrimero(["a", "b", "c"]);
-  const primerNumero = obtenerPrimero([1, 2, 3]);
+console.log("Array de strings:", arrayStrings);
+console.log("Array de números:", arrayNumeros);
 
-  const arrayStrings = crearArray("hola", 3);
-  const arrayNumeros = crearArray(5, 4);
+// Obtener último elemento
+function obtenerUltimo<T>(arr: T[]): T | undefined {
+  return arr[arr.length - 1];
+}
 
-  if (resultadoGenerics) {
-    resultadoGenerics.innerHTML = `
-      <div style="background: #e7f3ff; padding: 10px; border-radius: 4px;">
-        Primer string: ${primerString}<br>
-        Primer número: ${primerNumero}<br>
-        Array strings: [${arrayStrings.join(", ")}]<br>
-        Array números: [${arrayNumeros.join(", ")}]
-      </div>
-    `;
-  }
-});
+console.log("Último de [1,2,3]:", obtenerUltimo([1, 2, 3]));
+console.log('Último de ["a","b","c"]:', obtenerUltimo(["a", "b", "c"]));
 
 // ============================================
-// MÓDULO 8: Ejemplo Integrador - Lista de Tareas
+// MÓDULO 9: Generics en el DOM
 // ============================================
 
-interface Tarea {
-  id: number;
-  texto: string;
-  completada: boolean;
+console.log("=== MÓDULO 9: Generics en el DOM ===");
+
+// Función helper genérica
+function seleccionar<T extends HTMLElement>(selector: string): T | null {
+  return document.querySelector<T>(selector);
 }
 
-let tareas: Tarea[] = [];
-let nextId = 1;
+// Uso con tipos específicos
+const boton = seleccionar<HTMLButtonElement>('button[type="submit"]');
+const input = seleccionar<HTMLInputElement>('input[name="nombre"]');
+const select = seleccionar<HTMLSelectElement>('select[name="pais"]');
 
-const inputTarea = document.querySelector<HTMLInputElement>("#nuevaTarea");
-const btnAgregar = document.querySelector<HTMLButtonElement>("#agregar");
-const lista = document.querySelector<HTMLUListElement>("#lista");
+console.log("Botón encontrado:", boton?.textContent);
+console.log("Input encontrado:", input?.placeholder);
+console.log("Select encontrado:", select?.name);
 
-function agregarTarea(): void {
-  if (!inputTarea || !lista) return;
-
-  const texto = inputTarea.value.trim();
-  if (texto === "") return;
-
-  const tarea: Tarea = {
-    id: nextId++,
-    texto,
-    completada: false,
-  };
-
-  tareas.push(tarea);
-  renderizar();
-  inputTarea.value = "";
-  inputTarea.focus();
+// Demostrar ventaja de tipos
+if (boton) {
+  console.log("Botón tiene propiedad disabled:", "disabled" in boton);
 }
 
-function renderizar(): void {
-  if (!lista) return;
-
-  lista.innerHTML = "";
-
-  tareas.forEach((tarea) => {
-    const li = document.createElement("li");
-    li.textContent = tarea.texto;
-
-    const btnEliminar = document.createElement("button");
-    btnEliminar.textContent = "Eliminar";
-    btnEliminar.style.marginLeft = "10px";
-    btnEliminar.addEventListener("click", () => {
-      tareas = tareas.filter((t) => t.id !== tarea.id);
-      renderizar();
-    });
-
-    li.appendChild(btnEliminar);
-    lista.appendChild(li);
-  });
+if (input) {
+  console.log("Input tiene propiedad value:", "value" in input);
 }
 
-btnAgregar?.addEventListener("click", agregarTarea);
+// ============================================
+// LOGS FINALES
+// ============================================
 
-inputTarea?.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    agregarTarea();
-  }
-});
+console.log("✅ Clase 4 completada");
+console.log("📚 Conceptos cubiertos: FormData, Type Guards, Generics");
