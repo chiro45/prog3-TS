@@ -108,6 +108,28 @@
         <div id="resultado"></div>
     </section>
 
+    <!-- MÓDULO 4-5: Type Guards - instanceof -->
+    <section>
+        <h2>Módulo 4-5: Type Guards con instanceof</h2>
+        <p><strong>Haz click en cualquier elemento para ver su tipo específico:</strong></p>
+
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <button id="btn-demo" class="elemento-demo">Soy un Botón</button>
+            <input id="input-demo" class="elemento-demo" type="text" placeholder="Soy un Input">
+            <div id="div-demo" class="elemento-demo" style="padding: 15px; background: #e3f2fd; border: 2px solid #2196f3; border-radius: 4px; cursor: pointer;">
+                Soy un Div (haz click)
+            </div>
+            <select id="select-demo" class="elemento-demo">
+                <option>Soy un Select</option>
+            </select>
+        </div>
+
+        <div id="tipo-info" style="margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; display: none;">
+            <h3>Información del Elemento:</h3>
+            <pre id="tipo-detalle" style="background: white; padding: 10px; border-radius: 4px; overflow-x: auto;"></pre>
+        </div>
+    </section>
+
     <script src="index.js"></script>
 </body>
 

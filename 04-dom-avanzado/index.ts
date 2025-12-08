@@ -85,39 +85,95 @@ mostrarLongitud(123);
 mostrarLongitud(true);
 
 // ============================================
-// MÓDULO 5: Type Guards - instanceof
+// MÓDULO 4-5: Type Guards - instanceof (MEJORADO)
 // ============================================
 
-console.log("=== MÓDULO 5: Type Guards - instanceof ===");
+console.log("=== MÓDULO 4-5: Type Guards - instanceof ===");
 
-function manejarElemento(elemento: HTMLElement): string {
+/**
+ * ❌ SIN instanceof - TypeScript no sabe el tipo específico
+ * Esta función NO compilaría porque HTMLElement no tiene 'disabled'
+ */
+// function manejarSinTypeGuard(elemento: HTMLElement): void {
+//   elemento.disabled = true; // ❌ Error: disabled no existe en HTMLElement
+// }
+
+/**
+ * ✅ CON instanceof - TypeScript sabe el tipo después de validar
+ * Esta función SÍ compila porque validamos cada tipo específico
+ */
+function analizarElemento(elemento: HTMLElement): {
+  tipo: string;
+  propiedadesUnicas: string[];
+  ejemplo: string;
+} {
   if (elemento instanceof HTMLButtonElement) {
-    return `Es un BOTÓN: "${elemento.textContent}"`;
+    // ✅ Aquí TS sabe que elemento es HTMLButtonElement
+    return {
+      tipo: "HTMLButtonElement",
+      propiedadesUnicas: ["disabled", "type", "form"],
+      ejemplo: `disabled = ${elemento.disabled}`,
+    };
   } else if (elemento instanceof HTMLInputElement) {
-    return `Es un INPUT de tipo: ${elemento.type}`;
+    // ✅ Aquí TS sabe que elemento es HTMLInputElement
+    return {
+      tipo: "HTMLInputElement",
+      propiedadesUnicas: ["value", "placeholder", "type", "checked"],
+      ejemplo: `value = "${elemento.value}", type = "${elemento.type}"`,
+    };
   } else if (elemento instanceof HTMLDivElement) {
-    return `Es un DIV con id: ${elemento.id}`;
+    // ✅ Aquí TS sabe que elemento es HTMLDivElement
+    return {
+      tipo: "HTMLDivElement",
+      propiedadesUnicas: ["align", "innerHTML"],
+      ejemplo: `id = "${elemento.id}"`,
+    };
+  } else if (elemento instanceof HTMLSelectElement) {
+    // ✅ Aquí TS sabe que elemento es HTMLSelectElement
+    return {
+      tipo: "HTMLSelectElement",
+      propiedadesUnicas: ["options", "selectedIndex", "value"],
+      ejemplo: `selectedIndex = ${elemento.selectedIndex}`,
+    };
   } else {
-    return `Es un ${elemento.tagName}`;
+    // Tipo genérico
+    return {
+      tipo: `HTMLElement genérico (${elemento.tagName})`,
+      propiedadesUnicas: ["className", "id", "tagName"],
+      ejemplo: `tagName = "${elemento.tagName}"`,
+    };
   }
 }
 
-// Probar con elementos del DOM
-const botonRegistrar = document.querySelector<HTMLButtonElement>("button");
-const inputNombre = document.querySelector<HTMLInputElement>('input[name="nombre"]');
-const resultado2 = document.querySelector<HTMLDivElement>("#resultado");
+// Hacer INTERACTIVOS todos los elementos demo
+const elementosDemo = document.querySelectorAll<HTMLElement>(".elemento-demo");
+const tipoInfo = document.querySelector<HTMLDivElement>("#tipo-info");
+const tipoDetalle = document.querySelector<HTMLPreElement>("#tipo-detalle");
 
-if (botonRegistrar) {
-  console.log(manejarElemento(botonRegistrar));
-}
+elementosDemo.forEach((elemento) => {
+  elemento.addEventListener("click", () => {
+    console.log("🔍 Elemento clickeado:", elemento);
 
-if (inputNombre) {
-  console.log(manejarElemento(inputNombre));
-}
+    const info = analizarElemento(elemento);
 
-if (resultado2) {
-  console.log(manejarElemento(resultado2));
-}
+    console.log("📊 Análisis:", info);
+
+    if (tipoInfo && tipoDetalle) {
+      tipoInfo.style.display = "block";
+      tipoDetalle.textContent = `
+Tipo detectado: ${info.tipo}
+
+Propiedades únicas de este tipo:
+${info.propiedadesUnicas.map((prop) => `  • ${prop}`).join("\n")}
+
+Ejemplo de uso:
+  ${info.ejemplo}
+
+✅ instanceof permite acceder a propiedades específicas de forma segura
+      `.trim();
+    }
+  });
+});
 
 // ============================================
 // MÓDULO 6: Type Guards Personalizados
@@ -170,75 +226,8 @@ const usuario2 = validarUsuario("Al", "invalido", -5);
 console.log("Usuario 2:", usuario2);
 
 // ============================================
-// MÓDULO 7-8: Generics
-// ============================================
-
-console.log("=== MÓDULO 7-8: Generics ===");
-
-// Función genérica básica
-function obtenerPrimero<T>(arr: T[]): T {
-  return arr[0];
-}
-
-const primerString = obtenerPrimero(["a", "b", "c"]);
-const primerNumero = obtenerPrimero([1, 2, 3]);
-const primerBool = obtenerPrimero([true, false, true]);
-
-console.log("Primer string:", primerString);
-console.log("Primer número:", primerNumero);
-console.log("Primer boolean:", primerBool);
-
-// Crear arrays con generics
-function crearArray<T>(elemento: T, cantidad: number): T[] {
-  return Array(cantidad).fill(elemento);
-}
-
-const arrayStrings = crearArray("hola", 3);
-const arrayNumeros = crearArray(5, 4);
-
-console.log("Array de strings:", arrayStrings);
-console.log("Array de números:", arrayNumeros);
-
-// Obtener último elemento
-function obtenerUltimo<T>(arr: T[]): T | undefined {
-  return arr[arr.length - 1];
-}
-
-console.log("Último de [1,2,3]:", obtenerUltimo([1, 2, 3]));
-console.log('Último de ["a","b","c"]:', obtenerUltimo(["a", "b", "c"]));
-
-// ============================================
-// MÓDULO 9: Generics en el DOM
-// ============================================
-
-console.log("=== MÓDULO 9: Generics en el DOM ===");
-
-// Función helper genérica
-function seleccionar<T extends HTMLElement>(selector: string): T | null {
-  return document.querySelector<T>(selector);
-}
-
-// Uso con tipos específicos
-const boton = seleccionar<HTMLButtonElement>('button[type="submit"]');
-const input = seleccionar<HTMLInputElement>('input[name="nombre"]');
-const select = seleccionar<HTMLSelectElement>('select[name="pais"]');
-
-console.log("Botón encontrado:", boton?.textContent);
-console.log("Input encontrado:", input?.placeholder);
-console.log("Select encontrado:", select?.name);
-
-// Demostrar ventaja de tipos
-if (boton) {
-  console.log("Botón tiene propiedad disabled:", "disabled" in boton);
-}
-
-if (input) {
-  console.log("Input tiene propiedad value:", "value" in input);
-}
-
-// ============================================
 // LOGS FINALES
 // ============================================
 
 console.log("✅ Clase 4 completada");
-console.log("📚 Conceptos cubiertos: FormData, Type Guards, Generics");
+console.log("📚 Conceptos cubiertos: FormData, Type Guards (typeof e instanceof)");

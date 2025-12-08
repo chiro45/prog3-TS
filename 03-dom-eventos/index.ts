@@ -3,19 +3,40 @@
 // ============================================
 
 // ============================================
-// MÓDULO 3: Tipos Específicos del DOM
+// MÓDULO 1: El problema sin tipos en el DOM
 // ============================================
 
-console.log("=== MÓDULO 3: Tipos del DOM ===");
+console.log("=== MÓDULO 1: Problema sin tipos ===");
 
+// ❌ JavaScript sin tipos - Esto compila pero falla en runtime
+// const button = document.querySelector('#miBoton');
+// button.disabled = true; // Error si button es null
+
+// ✅ TypeScript con tipos - Detecta el error en tiempo de compilación
+// const button = document.querySelector<HTMLButtonElement>('#miBoton');
+// button.disabled = true; // ❌ Error: Object is possibly 'null'
+
+console.log("TypeScript previene errores de null en tiempo de compilación");
+
+// ============================================
+// MÓDULO 2: HTMLElement y sus variantes
+// ============================================
+
+console.log("=== MÓDULO 2: Tipos específicos del DOM ===");
+
+// PECULIARIDAD TS: Usar genéricos para especificar el tipo exacto
 const btn = document.querySelector<HTMLButtonElement>("#btn");
+//                                 ^^^^^^^^^^^^^^^^^^
+//                                 Genérico: tipo específico del elemento
+
 const input = document.querySelector<HTMLInputElement>("#input");
 const titulo = document.querySelector<HTMLHeadingElement>("#titulo");
 
-// Demostrar propiedades específicas
+// Cada tipo tiene propiedades específicas
 if (btn) {
   btn.addEventListener("click", () => {
-    btn.disabled = true; // Propiedad específica de HTMLButtonElement
+    // HTMLButtonElement tiene la propiedad 'disabled'
+    btn.disabled = true; // ✅ TypeScript sabe que existe
     btn.textContent = "¡Clickeado!";
     console.log("Botón deshabilitado");
   });
@@ -23,58 +44,64 @@ if (btn) {
 
 if (input) {
   input.addEventListener("input", () => {
-    console.log("Valor del input:", input.value); // Propiedad específica de HTMLInputElement
+    // HTMLInputElement tiene la propiedad 'value'
+    console.log("Valor:", input.value); // ✅ TypeScript sabe que existe
   });
 }
 
 if (titulo) {
   titulo.addEventListener("click", () => {
     titulo.style.color = titulo.style.color === "red" ? "#333" : "red";
-    console.log("Color del título cambiado");
   });
 }
 
 // ============================================
-// MÓDULO 4: querySelector - Selección Individual
+// MÓDULO 3: querySelector - Selección Individual
 // ============================================
 
-console.log("=== MÓDULO 4: querySelector ===");
+console.log("=== MÓDULO 3: querySelector ===");
 
+// PECULIARIDAD TS: querySelector retorna TipoEspecificado | null
 const miBoton = document.querySelector<HTMLButtonElement>("#miBoton");
+//    ^^^^^^^
+//    Tipo inferido: HTMLButtonElement | null
+
 const mensaje = document.querySelector<HTMLParagraphElement>("#mensaje");
 
+// IMPORTANTE: SIEMPRE verificar con if antes de usar
 if (miBoton && mensaje) {
   miBoton.addEventListener("click", () => {
-    mensaje.textContent = "¡Botón clickeado con TypeScript!";
+    // Dentro del if, TS sabe que NO son null (type narrowing)
+    mensaje.textContent = "¡Botón clickeado!";
     miBoton.disabled = true;
-    miBoton.style.opacity = "0.5";
-    console.log("querySelector: botón clickeado");
+    console.log("querySelector: elemento encontrado y usado de forma segura");
   });
 }
 
 // ============================================
-// MÓDULO 5: querySelectorAll - Múltiples Elementos
+// MÓDULO 4: querySelectorAll - Múltiples Elementos
 // ============================================
 
-console.log("=== MÓDULO 5: querySelectorAll ===");
+console.log("=== MÓDULO 4: querySelectorAll ===");
 
+// PECULIARIDAD TS: querySelectorAll retorna NodeListOf<Tipo>
 const botones = document.querySelectorAll<HTMLButtonElement>(".btn");
+//    ^^^^^^^
+//    Tipo: NodeListOf<HTMLButtonElement>
+
 const btnDeshabilitar =
   document.querySelector<HTMLButtonElement>("#deshabilitarTodos");
 
-console.log(`Encontrados ${botones.length} botones con clase .btn`);
+console.log(`Encontrados ${botones.length} botones`);
 
 btnDeshabilitar?.addEventListener("click", () => {
-  let contador = 0;
-
-  // NodeList tiene forEach
+  // NodeList tiene forEach ✅
   botones.forEach((boton) => {
     boton.disabled = true;
     boton.style.opacity = "0.5";
-    contador++;
   });
 
-  console.log(`${contador} botones deshabilitados`);
+  console.log("Todos los botones deshabilitados");
 
   if (btnDeshabilitar) {
     btnDeshabilitar.textContent = "¡Todos deshabilitados!";
@@ -82,259 +109,77 @@ btnDeshabilitar?.addEventListener("click", () => {
   }
 });
 
-// Demostrar conversión a Array
-const arrayBotones = Array.from(botones);
-const textosBotones = arrayBotones.map((btn) => btn.textContent);
-console.log("Textos de los botones:", textosBotones);
+// PECULIARIDAD TS: NodeList NO tiene map/filter/reduce
+// botones.map(btn => btn.textContent); // ❌ Error: map no existe en NodeList
+
+// Convertir a Array para usar métodos de array
+const arrayBotones = Array.from(botones); // ✅ Convertir con Array.from()
+
+const textos = arrayBotones.map((btn) => btn.textContent);
+console.log("Textos de los botones:", textos);
 
 // ============================================
-// MÓDULO 7: Event Types
+// MÓDULO 5: Event Types - MouseEvent y KeyboardEvent
 // ============================================
 
-console.log("=== MÓDULO 7: Event Types ===");
+console.log("=== MÓDULO 5: Event Types ===");
 
 const btnClick = document.querySelector<HTMLButtonElement>("#btnClick");
 const inputKey = document.querySelector<HTMLInputElement>("#inputKey");
 const info = document.querySelector<HTMLParagraphElement>("#info");
 
-// MouseEvent
+// PECULIARIDAD TS: Tipar el evento como MouseEvent
 btnClick?.addEventListener("click", (event: MouseEvent) => {
+  //                                         ^^^^^^^^^^
+  //                                         Tipo específico del evento
+
+  // Ahora TS conoce las propiedades de MouseEvent
   if (info) {
-    info.textContent = `MouseEvent - Click en coordenadas X: ${event.clientX}, Y: ${event.clientY}`;
-    info.style.color = "#e74c3c";
+    info.textContent = `Click en X: ${event.clientX}, Y: ${event.clientY}`;
+    info.style.background = "#ffe6e6";
   }
+
   console.log("MouseEvent:", {
     x: event.clientX,
     y: event.clientY,
-    button: event.button,
+    button: event.button, // 0=izq, 1=medio, 2=der
+    ctrlKey: event.ctrlKey,
   });
 });
 
-// KeyboardEvent
+// PECULIARIDAD TS: Tipar el evento como KeyboardEvent
 inputKey?.addEventListener("keydown", (event: KeyboardEvent) => {
+  //                                           ^^^^^^^^^^^^^
+  //                                           Tipo específico del evento
+
   console.log("KeyboardEvent:", {
-    key: event.key,
-    code: event.code,
+    key: event.key, // 'Enter', 'a', 'Escape'
+    code: event.code, // 'KeyA', 'Space'
     ctrlKey: event.ctrlKey,
     shiftKey: event.shiftKey,
   });
 
   if (event.key === "Enter" && info && inputKey) {
-    info.textContent = `KeyboardEvent - Presionaste Enter. Valor: "${inputKey.value}"`;
-    info.style.color = "#27ae60";
+    info.textContent = `Escribiste: "${inputKey.value}"`;
+    info.style.background = "#e6ffe6";
     inputKey.value = "";
   }
 });
 
-// ============================================
-// MÓDULO 8: target vs currentTarget
-// ============================================
-
-console.log("=== MÓDULO 8: target vs currentTarget ===");
-
-const contenedor = document.querySelector<HTMLDivElement>("#contenedor");
-const infoTarget = document.querySelector<HTMLParagraphElement>("#infoTarget");
-
-contenedor?.addEventListener("click", (event: MouseEvent) => {
-  // target: elemento específico clickeado
-  const target = event.target as HTMLElement;
-
-  // currentTarget: elemento con el listener (siempre contenedor)
-  const currentTarget = event.currentTarget as HTMLDivElement;
-
-  if (infoTarget) {
-    infoTarget.innerHTML = `
-      <strong>target</strong> (elemento clickeado): ${target.tagName}<br>
-      <strong>currentTarget</strong> (listener en): ${currentTarget.id}
-    `;
-  }
-
-  console.log("Event delegation:", {
-    target: target.tagName,
-    currentTarget: currentTarget.id,
-  });
-
-  // Event delegation: acción específica según tipo
-  if (target instanceof HTMLButtonElement) {
-    target.style.backgroundColor = "#3498db";
-    target.style.color = "white";
-    console.log("Clickeaste un botón");
-  } else if (target instanceof HTMLParagraphElement) {
-    target.style.fontWeight = "bold";
-    console.log("Clickeaste un párrafo");
-  }
-});
 
 // ============================================
-// MÓDULO 9: Formulario de Contacto
+// RESUMEN DE PECULIARIDADES TS
 // ============================================
 
-console.log("=== MÓDULO 9: Formulario con Validación ===");
+console.log(`
+=== RESUMEN: Peculiaridades de TypeScript con DOM ===
 
-const form = document.querySelector<HTMLFormElement>("#contacto");
-const nombreInput = document.querySelector<HTMLInputElement>("#nombre");
-const emailInput = document.querySelector<HTMLInputElement>("#email");
-const mensajeInput =
-  document.querySelector<HTMLTextAreaElement>("#mensajeForm");
-const resultado = document.querySelector<HTMLDivElement>("#resultado");
+1. Genéricos en querySelector: <HTMLButtonElement>
+2. Retorno nullable: querySelector retorna Tipo | null
+3. Verificación con if: SIEMPRE verificar antes de usar
+4. NodeListOf<T> vs Array<T>: NodeList no tiene map/filter
+5. Event Types: MouseEvent, KeyboardEvent tienen propiedades específicas
+6. Type Narrowing: TS infiere tipos dentro de if
 
-function mostrarError(msg: string): void {
-  if (resultado) {
-    resultado.textContent = `❌ ${msg}`;
-    resultado.style.color = "#e74c3c";
-    resultado.style.backgroundColor = "#ffe6e6";
-    resultado.style.display = "block";
-  }
-  console.error("Error de validación:", msg);
-}
-
-function mostrarExito(msg: string): void {
-  if (resultado) {
-    resultado.textContent = `✅ ${msg}`;
-    resultado.style.color = "#27ae60";
-    resultado.style.backgroundColor = "#e6ffe6";
-    resultado.style.display = "block";
-  }
-  console.log("Formulario enviado:", msg);
-}
-
-form?.addEventListener("submit", (event: Event) => {
-  event.preventDefault();
-
-  if (!nombreInput || !emailInput || !mensajeInput || !resultado) {
-    console.error("Elementos del formulario no encontrados");
-    return;
-  }
-
-  const nombre = nombreInput.value.trim();
-  const email = emailInput.value.trim();
-  const mensaje = mensajeInput.value.trim();
-
-  // Validaciones
-  if (nombre.length < 3) {
-    mostrarError("El nombre debe tener al menos 3 caracteres");
-    nombreInput.focus();
-    return;
-  }
-
-  if (!email.includes("@") || !email.includes(".")) {
-    mostrarError("Email inválido (debe contener @ y dominio)");
-    emailInput.focus();
-    return;
-  }
-
-  if (mensaje.length < 10) {
-    mostrarError("El mensaje debe tener al menos 10 caracteres");
-    mensajeInput.focus();
-    return;
-  }
-
-  // Éxito
-  mostrarExito(`Gracias ${nombre}, te contactaremos a ${email} pronto.`);
-
-  console.log("Datos del formulario:", { nombre, email, mensaje });
-
-  // Limpiar formulario
-  form.reset();
-});
-
-// ============================================
-// MÓDULO 10: Lista Interactiva
-// ============================================
-
-console.log("=== MÓDULO 10: Lista Interactiva ===");
-
-const itemInput = document.querySelector<HTMLInputElement>("#itemInput");
-const agregarBtn = document.querySelector<HTMLButtonElement>("#agregarBtn");
-const lista = document.querySelector<HTMLUListElement>("#lista");
-
-let itemCounter = 0;
-
-function agregarItem(): void {
-  if (!itemInput || !lista) {
-    console.error("Elementos de lista no encontrados");
-    return;
-  }
-
-  const texto = itemInput.value.trim();
-
-  if (texto === "") {
-    alert("⚠️ Escribe algo primero");
-    itemInput.focus();
-    return;
-  }
-
-  itemCounter++;
-
-  // Crear elementos
-  const li = document.createElement("li");
-  li.style.cssText = `
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    margin: 8px 0;
-    background: #f8f9fa;
-    border-radius: 6px;
-    border-left: 3px solid #3498db;
-    transition: all 0.3s ease;
-  `;
-
-  const span = document.createElement("span");
-  span.textContent = `${itemCounter}. ${texto}`;
-  span.style.flex = "1";
-
-  const btnEliminar = document.createElement("button");
-  btnEliminar.textContent = "Eliminar";
-  btnEliminar.style.cssText = `
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  `;
-
-  btnEliminar.addEventListener("click", () => {
-    li.style.opacity = "0";
-    li.style.transform = "translateX(20px)";
-    setTimeout(() => {
-      li.remove();
-      console.log(`Item "${texto}" eliminado`);
-    }, 300);
-  });
-
-  btnEliminar.addEventListener("mouseenter", () => {
-    btnEliminar.style.backgroundColor = "#c0392b";
-  });
-
-  btnEliminar.addEventListener("mouseleave", () => {
-    btnEliminar.style.backgroundColor = "#e74c3c";
-  });
-
-  li.appendChild(span);
-  li.appendChild(btnEliminar);
-  lista.appendChild(li);
-
-  console.log(`Item #${itemCounter} agregado: "${texto}"`);
-
-  // Limpiar input
-  itemInput.value = "";
-  itemInput.focus();
-}
-
-agregarBtn?.addEventListener("click", agregarItem);
-
-itemInput?.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    agregarItem();
-  }
-});
-
-// ============================================
-// LOGS FINALES
-// ============================================
-
-console.log("✅ Clase 3 inicializada correctamente");
-console.log("📚 Módulos activos: 3, 4, 5, 7, 8, 9, 10");
+¡Clase completada!
+`);

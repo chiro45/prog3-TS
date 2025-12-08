@@ -8,124 +8,48 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 50px auto;
+      max-width: 800px;
+      margin: 20px auto;
       padding: 20px;
-      background-color: #f5f5f5;
     }
 
     section {
-      background: white;
-      padding: 25px;
       margin-bottom: 30px;
+      padding: 20px;
+      background: #f5f5f5;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     h2 {
-      color: #333;
-      border-bottom: 3px solid #3498db;
-      padding-bottom: 10px;
-      margin-top: 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
     }
 
+    button,
     input,
-    textarea,
-    button {
-      padding: 10px;
-      margin: 5px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
     textarea {
-      width: 100%;
-      min-height: 80px;
-      resize: vertical;
-      font-family: Arial, sans-serif;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
     }
 
     button {
-      background-color: #3498db;
+      background: #3498db;
       color: white;
       cursor: pointer;
       border: none;
-      font-weight: bold;
     }
 
     button:hover {
-      background-color: #2980b9;
+      background: #2980b9;
     }
 
-    button:disabled {
-      background-color: #bdc3c7;
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      margin: 5px 0;
-      background: #f8f9fa;
-      border-radius: 4px;
-      border-left: 3px solid #3498db;
-    }
-
-    .btn-container {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .demo-btn {
-      padding: 12px 20px;
-    }
-
-    #contenedor {
-      background: #ecf0f1;
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-
-    #contenedor button,
-    #contenedor p {
-      margin: 10px;
-    }
-
-    #info {
-      background: #e8f4f8;
-      padding: 10px;
-      border-radius: 4px;
+    .resultado {
       margin-top: 10px;
-      min-height: 20px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    form input,
-    form textarea {
-      width: calc(100% - 22px);
-    }
-
-    #resultado {
-      margin-top: 15px;
-      padding: 15px;
+      padding: 10px;
       border-radius: 4px;
-      font-weight: bold;
     }
   </style>
 </head>
@@ -133,79 +57,40 @@
 <body>
   <h1>Clase 3: TypeScript + DOM (Parte 1)</h1>
 
-  <!-- MÓDULO 3: Tipos del DOM -->
+  <!-- MÓDULO 2: HTMLElement y variantes -->
   <section>
-    <h2>Módulo 3: Tipos Específicos del DOM</h2>
-    <p><strong>Cada elemento tiene su tipo y propiedades específicas:</strong></p>
+    <h2>Módulo 2: Tipos Específicos del DOM</h2>
     <button id="btn">Click me</button>
-    <input type="text" id="input" placeholder="Escribe algo aquí">
-    <h3 id="titulo">Este es un título</h3>
-    <p style="margin-top: 15px; color: #666; font-size: 14px;">
-      Abre la consola para ver cómo TypeScript maneja cada tipo de elemento.
-    </p>
+    <input type="text" id="input" placeholder="Escribe algo">
+    <h3 id="titulo">Título clickeable</h3>
   </section>
 
-  <!-- MÓDULO 4: querySelector -->
+  <!-- MÓDULO 3: querySelector -->
   <section>
-    <h2>Módulo 4: querySelector - Selección Individual</h2>
-    <button id="miBoton" class="demo-btn">Click me</button>
-    <p id="mensaje" style="margin-top: 10px; font-weight: bold; color: #3498db;"></p>
+    <h2>Módulo 3: querySelector - Selección Individual</h2>
+    <button id="miBoton">Clickeame</button>
+    <p id="mensaje"></p>
   </section>
 
-  <!-- MÓDULO 5: querySelectorAll -->
+  <!-- MÓDULO 4: querySelectorAll -->
   <section>
-    <h2>Módulo 5: querySelectorAll - Múltiples Elementos</h2>
-    <div class="btn-container">
-      <button class="btn demo-btn">Botón 1</button>
-      <button class="btn demo-btn">Botón 2</button>
-      <button class="btn demo-btn">Botón 3</button>
-    </div>
-    <button id="deshabilitarTodos" style="margin-top: 15px;">Deshabilitar todos los botones</button>
+    <h2>Módulo 4: querySelectorAll - Múltiples Elementos</h2>
+    <button class="btn">Botón 1</button>
+    <button class="btn">Botón 2</button>
+    <button class="btn">Botón 3</button>
+    <button id="deshabilitarTodos">Deshabilitar todos</button>
   </section>
 
-  <!-- MÓDULO 7: Event Types -->
+  <!-- MÓDULO 5: Event Types -->
   <section>
-    <h2>Módulo 7: Event Types - MouseEvent y KeyboardEvent</h2>
-    <button id="btnClick" class="demo-btn">Click me (MouseEvent)</button>
-    <input type="text" id="inputKey" placeholder="Presiona Enter (KeyboardEvent)" style="width: 300px;">
-    <p id="info"></p>
+    <h2>Módulo 5: Event Types - MouseEvent y KeyboardEvent</h2>
+    <button id="btnClick">Click me (MouseEvent)</button>
+    <input type="text" id="inputKey" placeholder="Presiona Enter (KeyboardEvent)">
+    <p id="info" class="resultado"></p>
   </section>
 
-  <!-- MÓDULO 8: target vs currentTarget -->
-  <section>
-    <h2>Módulo 8: event.target vs event.currentTarget</h2>
-    <p><strong>Click en cualquier elemento del contenedor:</strong></p>
-    <div id="contenedor">
-      <button>Botón A</button>
-      <button>Botón B</button>
-      <p>Este es un párrafo clickeable</p>
-    </div>
-    <p id="infoTarget" style="margin-top: 10px; background: #fff3cd; padding: 10px; border-radius: 4px;"></p>
-  </section>
 
-  <!-- MÓDULO 9: Formulario -->
-  <section>
-    <h2>Módulo 9: Formulario de Contacto con Validación</h2>
-    <form id="contacto">
-      <input type="text" id="nombre" placeholder="Nombre completo" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <textarea id="mensajeForm" placeholder="Tu mensaje (mínimo 10 caracteres)" required></textarea>
-      <button type="submit">Enviar Mensaje</button>
-    </form>
-    <div id="resultado"></div>
-  </section>
-
-  <!-- MÓDULO 10: Lista Interactiva -->
-  <section>
-    <h2>Módulo 10: Lista Interactiva</h2>
-    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-      <input type="text" id="itemInput" placeholder="Escribe un item" style="flex: 1;">
-      <button id="agregarBtn">Agregar Item</button>
-    </div>
-    <ul id="lista"></ul>
-  </section>
-
-  <script src="index.js"></script>
+  <script src="index-nuevo.js"></script>
 </body>
 
 </html>
