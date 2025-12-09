@@ -9,7 +9,7 @@ prog3-TS/
 ├── 01-typescript-basico/     # Tipos primitivos y funciones básicas
 ├── 02-objetos-y-tipos/        # Interfaces, type aliases, union types
 ├── 03-dom-eventos/            # Manipulación del DOM y eventos
-├── 04-dom-avanzado/           # Type guards, generics, componentes
+├── 04-dom-avanzado/           # FormData, Type Guards (typeof, instanceof)
 └── 05-async-fetch/            # Async/await y fetch API
 ```
 
